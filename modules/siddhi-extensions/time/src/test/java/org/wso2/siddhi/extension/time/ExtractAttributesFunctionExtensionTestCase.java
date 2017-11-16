@@ -19,6 +19,8 @@
 package org.wso2.siddhi.extension.time;
 
 import junit.framework.Assert;
+import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +32,17 @@ import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
 import org.wso2.siddhi.query.api.exception.ExecutionPlanValidationException;
 
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+
 public class ExtractAttributesFunctionExtensionTestCase {
 
     static final Logger log = Logger.getLogger(ExtractAttributesFunctionExtensionTestCase.class);
     private volatile int count;
     private volatile boolean eventArrived;
+    LocalDateTime currentTime = LocalDateTime.now();
 
     @Before
     public void init() {
@@ -111,20 +119,20 @@ public class ExtractAttributesFunctionExtensionTestCase {
                     if (count == 1) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                     if (count == 2) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                 }
             }
         });
         InputHandler inputHandler = executionPlanRuntime.getInputHandler("inputStream");
         executionPlanRuntime.start();
-        inputHandler.send(new Object[]{"IBM", "2014:3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", 1394484824000L});
-        inputHandler.send(new Object[]{"IBM", "2015:3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", 1394484824000L});
+        inputHandler.send(new Object[]{"IBM", "2014:3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
+        inputHandler.send(new Object[]{"IBM", "2015:3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
         Thread.sleep(100);
         Assert.assertEquals(2, count);
         Assert.assertTrue(eventArrived);
@@ -226,20 +234,20 @@ public class ExtractAttributesFunctionExtensionTestCase {
                     if (count == 1) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                     if (count == 2) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                 }
             }
         });
         InputHandler inputHandler = executionPlanRuntime.getInputHandler("inputStream");
         executionPlanRuntime.start();
-        inputHandler.send(new Object[]{"IBM", null, "yyyy-MM-dd hh:mm:ss", 1394484824000L});
-        inputHandler.send(new Object[]{"IBM", null, "ss", 1394484824000L});
+        inputHandler.send(new Object[]{"IBM", null, "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
+        inputHandler.send(new Object[]{"IBM", null, "ss", System.currentTimeMillis()});
         Thread.sleep(100);
         Assert.assertEquals(2, count);
         Assert.assertTrue(eventArrived);
@@ -273,20 +281,20 @@ public class ExtractAttributesFunctionExtensionTestCase {
                     if (count == 1) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                     if (count == 2) {
                         Assert.assertEquals(null, event.getData(1));
                         Assert.assertEquals(null, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                 }
             }
         });
         InputHandler inputHandler = executionPlanRuntime.getInputHandler("inputStream");
         executionPlanRuntime.start();
-        inputHandler.send(new Object[]{"IBM", "2014:3-11 02:23:44", null, 1394484824000L});
-        inputHandler.send(new Object[]{"IBM", "2012:3-11 02:23:44", null, 1394484824000L});
+        inputHandler.send(new Object[]{"IBM", "2014:3-11 02:23:44", null, System.currentTimeMillis()});
+        inputHandler.send(new Object[]{"IBM", "2012:3-11 02:23:44", null, System.currentTimeMillis()});
         Thread.sleep(100);
         Assert.assertEquals(2, count);
         Assert.assertTrue(eventArrived);
@@ -378,21 +386,21 @@ public class ExtractAttributesFunctionExtensionTestCase {
                     if (count == 1) {
                         Assert.assertEquals(44, event.getData(1));
                         Assert.assertEquals(3, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                     if (count == 2) {
                         Assert.assertEquals(44, event.getData(1));
                         Assert.assertEquals(3, event.getData(2));
-                        Assert.assertEquals("2", event.getData(3).toString());
+                        Assert.assertEquals(currentTime.getHour(), event.getData(3));
                     }
                 }
             }
         });
         InputHandler inputHandler = executionPlanRuntime.getInputHandler("inputStream");
         executionPlanRuntime.start();
-        inputHandler.send(new Object[]{"IBM", "2014-3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", 1394484824000L});
-        inputHandler.send(new Object[]{"IBM", "2014-3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", 1394484824000L});
-        inputHandler.send(new Object[]{"IBM", "2014-3-11 22:23:44", "yyyy-MM-dd hh:mm:ss", 1394556804000L});
+        inputHandler.send(new Object[]{"IBM", "2014-3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
+        inputHandler.send(new Object[]{"IBM", "2014-3-11 02:23:44", "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
+        inputHandler.send(new Object[]{"IBM", "2014-3-11 22:23:44", "yyyy-MM-dd hh:mm:ss", System.currentTimeMillis()});
         Thread.sleep(100);
         Assert.assertEquals(3, count);
         Assert.assertTrue(eventArrived);
@@ -400,12 +408,20 @@ public class ExtractAttributesFunctionExtensionTestCase {
     }
 
     @Test
-    public void extractAttributesFunctionExtension14() throws InterruptedException {
+    public void extractAttributesFunctionExtension14() throws InterruptedException, ParseException {
 
         log.info("ExtractAttributesFunctionExtensionTestCase14: " +
                 "<int>  time: extract (<string> unit ,<string>  dateValue, <string> dataFormat, <string> locale)");
         SiddhiManager siddhiManager = new SiddhiManager();
-
+        Calendar calendarEN = Calendar.getInstance(LocaleUtils.toLocale("en_US"));
+        Calendar calendarFR = Calendar.getInstance(LocaleUtils.toLocale("fr_FR"));
+        FastDateFormat userSpecificFormat;
+        userSpecificFormat = FastDateFormat.getInstance("yyyy-MM-dd");
+        Date userSpecifiedDate = userSpecificFormat.parse("2017-10-8");
+        calendarEN.setTime(userSpecifiedDate);
+        calendarFR.setTime(userSpecifiedDate);
+        final Integer valueEN =  calendarEN.get(Calendar.WEEK_OF_YEAR);
+        final Integer valueFR =  calendarFR.get(Calendar.WEEK_OF_YEAR);
         String inStreamDefinition = "" +
                 "define stream inputStream (symbol string,dateValue string,dateFormat string," +
                 "timestampInMilliseconds long);";
@@ -428,7 +444,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueEN, inEvent.getData(1));
                 }
             }
         });
@@ -441,7 +457,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(40, inEvent.getData(1));
+                    Assert.assertEquals(valueFR, inEvent.getData(1));
                 }
             }
         });
@@ -456,11 +472,17 @@ public class ExtractAttributesFunctionExtensionTestCase {
     }
 
     @Test
-    public void extractAttributesFunctionExtension15() throws InterruptedException {
+    public void extractAttributesFunctionExtension15() throws InterruptedException, ParseException {
 
         log.info("ExtractAttributesFunctionExtensionTestCase15: " +
                 "<int>  time: extract (<long> timestampInMilliseconds ,<string>  unit, <string> locale)");
         SiddhiManager siddhiManager = new SiddhiManager();
+        Calendar calendarEN = Calendar.getInstance(LocaleUtils.toLocale("en_US"));
+        Calendar calendarFR = Calendar.getInstance(LocaleUtils.toLocale("fr_FR"));
+        calendarEN.setTimeInMillis(1507401000000L);
+        calendarFR.setTimeInMillis(1507401000000L);
+        final Integer valueEN =  calendarEN.get(Calendar.WEEK_OF_YEAR);
+        final Integer valueFR =  calendarFR.get(Calendar.WEEK_OF_YEAR);
 
         String inStreamDefinition = "" +
                 "define stream inputStream (symbol string,dateValue string,dateFormat string," +
@@ -484,7 +506,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueEN, inEvent.getData(1));
                 }
             }
         });
@@ -497,7 +519,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(40, inEvent.getData(1));
+                    Assert.assertEquals(valueFR, inEvent.getData(1));
                 }
             }
         });
@@ -517,7 +539,9 @@ public class ExtractAttributesFunctionExtensionTestCase {
         log.info("ExtractAttributesFunctionExtensionTestCase16: " +
                 "<int>  time: extract (<long> timestampInMilliseconds ,<string>  unit)");
         SiddhiManager siddhiManager = new SiddhiManager();
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(1507401000000L);
+        final Integer valueWeek =  calendar.get(Calendar.WEEK_OF_YEAR);
         String inStreamDefinition = "" +
                 "define stream inputStream (symbol string,dateValue string,dateFormat string," +
                 "timestampInMilliseconds long);";
@@ -540,7 +564,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueWeek, inEvent.getData(1));
                 }
             }
         });
@@ -553,7 +577,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueWeek, inEvent.getData(1));
                 }
             }
         });
@@ -568,12 +592,17 @@ public class ExtractAttributesFunctionExtensionTestCase {
     }
 
     @Test
-    public void extractAttributesFunctionExtension17() throws InterruptedException {
+    public void extractAttributesFunctionExtension17() throws InterruptedException, ParseException {
 
         log.info("ExtractAttributesFunctionExtensionTestCase17: " +
                 "<int>  time: extract (<string> unit ,<string>  dateValue)");
         SiddhiManager siddhiManager = new SiddhiManager();
-
+        Calendar calendar = Calendar.getInstance();
+        FastDateFormat userSpecificFormat;
+        userSpecificFormat = FastDateFormat.getInstance("yyyy-MM-dd");
+        Date userSpecifiedDate = userSpecificFormat.parse("2017-10-8");
+        calendar.setTime(userSpecifiedDate);
+        final Integer valueWeek =  calendar.get(Calendar.WEEK_OF_YEAR);
         String inStreamDefinition = "" +
                 "define stream inputStream (symbol string,dateValue string," +
                 "timestampInMilliseconds long);";
@@ -596,7 +625,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueWeek, inEvent.getData(1));
                 }
             }
         });
@@ -609,7 +638,7 @@ public class ExtractAttributesFunctionExtensionTestCase {
                 for (Event inEvent : inEvents) {
                     count++;
                     log.info("Event : " + count + ",WEEK : " + inEvent.getData(1));
-                    Assert.assertEquals(41, inEvent.getData(1));
+                    Assert.assertEquals(valueWeek, inEvent.getData(1));
                 }
             }
         });
